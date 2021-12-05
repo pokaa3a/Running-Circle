@@ -37,7 +37,7 @@ public class Circle : MonoBehaviour
             positions[i] = pos;
         }
 
-        lineRenderer.useWorldSpace = true;
+        // lineRenderer.useWorldSpace = true;
         lineRenderer.loop = true;
         lineRenderer.useWorldSpace = false;
         lineRenderer.widthMultiplier = Config.widthMultiplier;
