@@ -67,5 +67,9 @@ public class Ball : MonoBehaviour
         {
             GameAdmin.Instance.GameOver();
         }
+        else if (collision.gameObject.tag == "Goal")
+        {
+            GameAdmin.Instance.LevelComplete();
+        }
     }
 }

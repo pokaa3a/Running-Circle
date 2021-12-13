@@ -6,7 +6,7 @@ public class MovingBase : MonoBehaviour
 {
     public class Config
     {
-        public const float raisingSpeed = 1.0f;
+        public const float raisingSpeed = 1.5f;
     }
 
     void Awake()
