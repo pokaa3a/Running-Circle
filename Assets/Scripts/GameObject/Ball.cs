@@ -11,7 +11,17 @@ public class Ball : MonoBehaviour
 
     bool clockwise = true;
 
+    void Awake()
+    {
+        GameAdmin.Instance.ball = this;
+    }
+
     void Start()
+    {
+        Initialize();
+    }
+
+    public void Initialize()
     {
         // Initial position is at 12am position of the circle
         gameObject.transform.localPosition = new Vector2(
@@ -22,6 +32,8 @@ public class Ball : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!GameAdmin.Instance.status.ballCanMove) return;
+
         // Circular moving
         Vector2 vec = gameObject.transform.localPosition -
             new Vector3(Circle.Config.cx, Circle.Config.cy);
@@ -53,7 +65,7 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.tag == "Obstacle")
         {
-            Debug.Log("Hit Obstacle");
+            GameAdmin.Instance.GameOver();
         }
     }
 }
