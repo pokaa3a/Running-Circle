@@ -15,7 +15,13 @@ public class Circle : MonoBehaviour
 
     LineRenderer lineRenderer;
 
-    // Start is called before the first frame update
+    void Awake()
+    {
+        CircleCollider2D circleColl =
+            gameObject.GetComponent<CircleCollider2D>() as CircleCollider2D;
+        circleColl.offset = new Vector2(Config.cx, Config.cy);
+    }
+
     void Start()
     {
         lineRenderer = gameObject.GetComponent<LineRenderer>();
@@ -43,5 +49,13 @@ public class Circle : MonoBehaviour
         lineRenderer.widthMultiplier = Config.widthMultiplier;
         lineRenderer.positionCount = positions.Length;
         lineRenderer.SetPositions(positions);
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Goal")
+        {
+            GameAdmin.Instance.LevelComplete();
+        }
     }
 }

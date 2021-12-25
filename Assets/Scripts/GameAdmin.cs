@@ -14,7 +14,7 @@ public class GameAdmin
     public GameStartPage gameStartPage;
     public GameOverPage gameOverPage;
     public LevelCompletePage levelCompletePage;
-    public Ball ball;
+    public BallManager ballManager;
     public MovingBase movingBase;
 
     private static GameAdmin _instance;
@@ -43,8 +43,10 @@ public class GameAdmin
         gameOverPage.gameObject.SetActive(false);
         levelCompletePage.gameObject.SetActive(false);
 
-        ball.Initialize();
+        // ball.Initialize();
+        ballManager.TriggerFirstBall();
         movingBase.Initialize();
+
         status.ballCanMove = true;
         status.baseCanMove = false;
 

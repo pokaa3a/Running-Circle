@@ -9,25 +9,34 @@ public class Ball : MonoBehaviour
         public const float angularSpeed = 1.5f;
     }
 
-    bool clockwise = true;
+    public int id = 0;
 
-    void Awake()
+    private bool _triggered = false;
+    public bool triggered
     {
-        GameAdmin.Instance.ball = this;
+        get => _triggered;
+        set
+        {
+            _triggered = value;
+
+            SpriteRenderer sprRenderer =
+                gameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
+            sprRenderer.enabled = _triggered;
+
+            CircleCollider2D circleColl =
+                gameObject.GetComponent<CircleCollider2D>() as CircleCollider2D;
+            circleColl.enabled = _triggered;
+        }
     }
 
-    void Start()
+    public void Initialize(int id, float degree)
     {
-        Initialize();
-    }
-
-    public void Initialize()
-    {
-        // Initial position is at 12am position of the circle
         gameObject.transform.localPosition = new Vector2(
-            Circle.Config.cx,
-            Circle.Config.cy + Circle.Config.radius
+            Circle.Config.cx + Mathf.Sin(degree * Mathf.Deg2Rad) * Circle.Config.radius,
+            Circle.Config.cy + Mathf.Cos(degree * Mathf.Deg2Rad) * Circle.Config.radius
         );
+        triggered = false;
+        this.id = id;
     }
 
     void FixedUpdate()
@@ -42,7 +51,7 @@ public class Ball : MonoBehaviour
         if (gameObject.transform.localPosition.x < Circle.Config.cx)
             radian = 2f * Mathf.PI - radian;
 
-        if (clockwise)
+        if (BallManager.Config.clockwise)
             radian += Config.angularSpeed * Time.deltaTime;
         else
             radian -= Config.angularSpeed * Time.deltaTime;
@@ -53,23 +62,17 @@ public class Ball : MonoBehaviour
         );
     }
 
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            clockwise ^= true;
-        }
-    }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Obstacle")
         {
-            GameAdmin.Instance.GameOver();
+            // GameAdmin.Instance.GameOver();
+            GameAdmin.Instance.ballManager.BallCollideObstacle(id);
         }
-        else if (collision.gameObject.tag == "Goal")
+        else if (collision.gameObject.tag == "Food")
         {
-            GameAdmin.Instance.LevelComplete();
+            GameAdmin.Instance.ballManager.AddOneBall(id);
+            Destroy(collision.gameObject);
         }
     }
 }
